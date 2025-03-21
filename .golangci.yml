@@ -1,0 +1,44 @@
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+  gofmt:
+    simplify: true
+  revive:
+    ignore-generated-header: true
+  godox:
+    keywords:
+      - TODO
+  gocritic:
+    disable-all: false
+  govet:
+    disable-all: false
+
+linters:
+  enable:
+    - goimports
+    - govet
+    - unused
+    - ineffassign
+    - gosimple
+    - staticcheck
+    - errcheck
+    - revive
+    - gocyclo
+    - dupl
+    - testifylint
+    - gosimple
+    - gofmt
+    - godox
+    - revive
+    - gocritic
+    - gosec
+
+run:
+  timeout: 5m
+  tests: true
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+
