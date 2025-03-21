@@ -21,8 +21,7 @@ func main() {
 
 	router.HandleFunc("GET /health", func(writer http.ResponseWriter, request *http.Request) {
 		slog.Info("Health check")
-		_, err := writer.Write([]byte("{'status': 'ok'}"))
-		if err != nil {
+		if _, err := writer.Write([]byte("{'status': 'ok'}")); err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
 		}
 		writer.WriteHeader(http.StatusOK)
@@ -30,8 +29,7 @@ func main() {
 
 	router.HandleFunc("GET /foo", func(writer http.ResponseWriter, request *http.Request) {
 		slog.Info("Foo request")
-		_, err := writer.Write([]byte("{'message': 'foo'}"))
-		if err != nil {
+		if _, err := writer.Write([]byte("{'message': 'foo'}")); err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
 		}
 		writer.WriteHeader(http.StatusOK)
@@ -39,8 +37,7 @@ func main() {
 
 	router.HandleFunc("GET /bar", func(writer http.ResponseWriter, request *http.Request) {
 		slog.Info("Foo request")
-		_, err := writer.Write([]byte("{'message': 'foo'}"))
-		if err != nil {
+		if _, err := writer.Write([]byte("{'message': 'foo'}")); err != nil {
 			writer.WriteHeader(http.StatusInternalServerError)
 		}
 		writer.WriteHeader(http.StatusOK)
