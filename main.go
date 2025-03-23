@@ -2,11 +2,15 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	_ "github.com/lib/pq"
+
 	"time"
 )
 
@@ -16,6 +20,24 @@ func main() {
 	defer func() {
 		os.Exit(exitCode)
 	}()
+
+	databaseUrl := os.Getenv("DATABASE_URL")
+
+	db, err := sql.Open("postgres", databaseUrl)
+
+	if err != nil {
+		slog.Error("Database connection error", "error", err)
+		exitCode = 1
+		return
+	}
+
+	err = db.Ping()
+
+	if err != nil {
+		slog.Error("Database ping error", "error", err)
+		exitCode = 1
+		return
+	}
 
 	router := http.NewServeMux()
 

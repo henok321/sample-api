@@ -2,9 +2,9 @@
 
 GOARCH 			:= $(shell uname -m)
 GOOS 			:= $(shell uname -s | tr '[:upper:]' '[:lower:]')
-OUTPUT       	:= knobel-manager-service
+OUTPUT       	:= sample-api
 BUILD_FLAGS  	:= -a -ldflags="-s -w -extldflags '-static'"
-CMD_DIR      	:= ./cmd
+CMD_DIR      	:= .
 
 .PHONY: help setup reset lint update test build clean check-deps
 

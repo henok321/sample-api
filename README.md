@@ -57,7 +57,7 @@ make build
 set -o allexport
 source .env
 set +o allexport
-./knobel-manager-service
+./sample-api
 ```
 
 ### Health Check
