@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"sample-api/pkg/message"
 	"strconv"
+	"time"
 )
 
 type CreateMessageRequest struct {
@@ -18,10 +19,10 @@ type UpdateMessageRequest struct {
 }
 
 type MessageResponse struct {
-	ID        int    `json:"id"`
-	Content   string `json:"content"`
-	CreatedAt string `json:"createdAt"`
-	UpdatedAt string `json:"updatedAt"`
+	ID        int       `json:"id"`
+	Content   string    `json:"content"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 type MessageListResponse struct {
@@ -56,14 +57,16 @@ func (h *MessageHandler) FindAll(writer http.ResponseWriter, request *http.Reque
 	writer.WriteHeader(http.StatusOK)
 	writer.Header().Set("Content-Type", "application/json")
 
-	responseBody := MessageListResponse{}
+	responseBody := MessageListResponse{
+		Messages: []*MessageResponse{},
+	}
 
 	for _, message := range allMessages {
 		responseBody.Messages = append(responseBody.Messages, &MessageResponse{
 			ID:        message.ID,
 			Content:   message.Content,
-			CreatedAt: message.CreatedAt.String(),
-			UpdatedAt: message.UpdatedAt.String(),
+			CreatedAt: message.CreatedAt,
+			UpdatedAt: message.UpdatedAt,
 		})
 	}
 	if err := json.NewEncoder(writer).Encode(responseBody); err != nil {
@@ -98,9 +101,9 @@ func (h *MessageHandler) FindByID(writer http.ResponseWriter, request *http.Requ
 	responseBody := MessageResponse{
 		ID:        message.ID,
 		Content:   message.Content,
-		CreatedAt: message.CreatedAt.String(),
+		CreatedAt: message.CreatedAt,
 
-		UpdatedAt: message.UpdatedAt.String(),
+		UpdatedAt: message.UpdatedAt,
 	}
 
 	if err := json.NewEncoder(writer).Encode(responseBody); err != nil {

@@ -6,10 +6,10 @@ import (
 )
 
 type Message struct {
-	ID        int       `json:"id"`
-	Content   string    `json:"content"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID        int
+	Content   string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type MessageRepository interface {
@@ -33,7 +33,28 @@ func (r *messageRepository) Create(message *Message) error {
 }
 
 func (r *messageRepository) FindAll() ([]*Message, error) {
-	return nil, nil
+	rows, err := r.db.Query("select id, content, created_at, updated_at from messages")
+
+	if err != nil {
+		return nil, err
+	}
+
+	allMessages := []*Message{}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		message := Message{}
+
+		if err := rows.Scan(&message.ID, &message.Content, &message.CreatedAt, &message.UpdatedAt); err != nil {
+			return nil, err
+		}
+
+		allMessages = append(allMessages, &message)
+
+	}
+
+	return allMessages, nil
 }
 
 func (r *messageRepository) FindByID(id int) (*Message, error) {

@@ -1,0 +1,16 @@
+{
+    "messages": [
+        {
+            "id": 1,
+            "content": "Hello, World!",
+            "createdAt": "2020-01-01T00:00:00Z",
+            "updatedAt": "2020-01-01T00:00:00Z"
+        },
+        {
+            "id": 2,
+            "content": "Goodbye, World!",
+            "createdAt": "2020-01-01T00:00:00Z",
+            "updatedAt": "2020-01-01T00:00:00Z"
+        }
+    ]
+}
