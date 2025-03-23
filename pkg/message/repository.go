@@ -1,6 +1,7 @@
 package message
 
 import (
+	"context"
 	"database/sql"
 	"time"
 )
@@ -13,7 +14,7 @@ type Message struct {
 }
 
 type MessageRepository interface {
-	Create(message *Message) error
+	Create(message *Message) (*Message, error)
 	FindAll() ([]*Message, error)
 	FindByID(id int) (*Message, error)
 	Update(message *Message) error
@@ -28,15 +29,28 @@ func newMessageRepository(db *sql.DB) MessageRepository {
 	return &messageRepository{db: db}
 }
 
-func (r *messageRepository) Create(message *Message) error {
-	return nil
+func (r *messageRepository) Create(message *Message) (*Message, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	row := r.db.QueryRowContext(ctx, "INSERT INTO messages (content) VALUES ($1) RETURNING id, content, created_at, updated_at", message.Content)
+
+	createdMessage := Message{}
+
+	if err := row.Scan(&createdMessage.ID, &createdMessage.Content, &createdMessage.CreatedAt, &createdMessage.UpdatedAt); err != nil {
+		return &Message{}, err
+	}
+
+	return &createdMessage, nil
 }
 
 func (r *messageRepository) FindAll() ([]*Message, error) {
-	rows, err := r.db.Query("select id, content, created_at, updated_at from messages")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	rows, err := r.db.QueryContext(ctx, "select id, content, created_at, updated_at from messages")
 
 	if err != nil {
-		return nil, err
+		return []*Message{}, err
 	}
 
 	allMessages := []*Message{}
@@ -47,7 +61,7 @@ func (r *messageRepository) FindAll() ([]*Message, error) {
 		message := Message{}
 
 		if err := rows.Scan(&message.ID, &message.Content, &message.CreatedAt, &message.UpdatedAt); err != nil {
-			return nil, err
+			return []*Message{}, err
 		}
 
 		allMessages = append(allMessages, &message)
@@ -58,7 +72,7 @@ func (r *messageRepository) FindAll() ([]*Message, error) {
 }
 
 func (r *messageRepository) FindByID(id int) (*Message, error) {
-	return nil, nil
+	return &Message{}, nil
 }
 
 func (r *messageRepository) Update(message *Message) error {

@@ -21,6 +21,16 @@ func TestScores(t *testing.T) {
 				executeSQLFile(t, db, "./test_data/sql/messages.sql")
 			},
 		},
+		"Create new message": {
+			method:             "POST",
+			endpoint:           "/messages",
+			requestBody:        `{"content": "Hello, World!"}`,
+			expectedStatusCode: 201,
+			expectedHeaders: map[string]string{
+				"Content-Type": "application/json",
+				"Location":     "/messages/1",
+			},
+		},
 	}
 
 	dbConn, teardownDatabase := setupTestDatabase(t)

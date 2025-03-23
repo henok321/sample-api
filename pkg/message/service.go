@@ -1,7 +1,7 @@
 package message
 
 type MessageService interface {
-	Create(message *Message) error
+	Create(message *Message) (int, error)
 	FindAll() ([]*Message, error)
 	FindByID(id int) (*Message, error)
 	Update(message *Message) error
@@ -16,8 +16,10 @@ func newMessageService(repo MessageRepository) MessageService {
 	return &messageService{repo: repo}
 }
 
-func (s *messageService) Create(message *Message) error {
-	return s.repo.Create(message)
+func (s *messageService) Create(message *Message) (int, error) {
+	message, err := s.repo.Create(message)
+
+	return message.ID, err
 }
 
 func (s *messageService) FindAll() ([]*Message, error) {

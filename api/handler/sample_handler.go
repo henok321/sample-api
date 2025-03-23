@@ -41,15 +41,28 @@ func (h *MessageHandler) Create(writer http.ResponseWriter, request *http.Reques
 	messageCreateRequest := CreateMessageRequest{}
 
 	if err := json.NewDecoder(request.Body).Decode(&messageCreateRequest); err != nil {
+		slog.ErrorContext(request.Context(), "Failed to decode request body", "error", err)
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
+	id, err := h.service.Create(&message.Message{Content: messageCreateRequest.Content})
+
+	if err != nil {
+		slog.ErrorContext(request.Context(), "Failed to create message", "error", err)
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	writer.WriteHeader(http.StatusCreated)
+	writer.Header().Add("Location", "/messages/"+strconv.Itoa(id))
 }
 
 func (h *MessageHandler) FindAll(writer http.ResponseWriter, request *http.Request) {
 	allMessages, err := h.service.FindAll()
 
 	if err != nil {
+		slog.ErrorContext(request.Context(), "Failed to find all messages", "error", err)
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -86,11 +99,13 @@ func (h *MessageHandler) FindByID(writer http.ResponseWriter, request *http.Requ
 	message, err := h.service.FindByID(id)
 
 	if err != nil {
+		slog.ErrorContext(request.Context(), "Failed to find message by ID", "error", err)
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	if message == nil {
+		slog.Info("Message not found", "id", id)
 		writer.WriteHeader(http.StatusNotFound)
 		return
 	}
@@ -108,6 +123,8 @@ func (h *MessageHandler) FindByID(writer http.ResponseWriter, request *http.Requ
 
 	if err := json.NewEncoder(writer).Encode(responseBody); err != nil {
 		slog.ErrorContext(request.Context(), "Failed to encode response", "error", err)
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 }
