@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"sample-api/api/routes"
 	"syscall"
 
 	_ "github.com/lib/pq"
@@ -39,31 +40,7 @@ func main() {
 		return
 	}
 
-	router := http.NewServeMux()
-
-	router.HandleFunc("GET /health", func(writer http.ResponseWriter, request *http.Request) {
-		slog.Info("Health check")
-		if _, err := writer.Write([]byte("{'status': 'ok'}")); err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
-		}
-		writer.WriteHeader(http.StatusOK)
-	})
-
-	router.HandleFunc("GET /foo", func(writer http.ResponseWriter, request *http.Request) {
-		slog.Info("Foo request")
-		if _, err := writer.Write([]byte("{'message': 'foo'}")); err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
-		}
-		writer.WriteHeader(http.StatusOK)
-	})
-
-	router.HandleFunc("GET /bar", func(writer http.ResponseWriter, request *http.Request) {
-		slog.Info("Foo request")
-		if _, err := writer.Write([]byte("{'message': 'foo'}")); err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
-		}
-		writer.WriteHeader(http.StatusOK)
-	})
+	router := routes.SetupRouter(db)
 
 	server := &http.Server{
 		Handler:     router,
