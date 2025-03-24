@@ -89,7 +89,7 @@ func (h *MessageHandler) FindAll(writer http.ResponseWriter, request *http.Reque
 }
 
 func (h *MessageHandler) FindByID(writer http.ResponseWriter, request *http.Request) {
-	idParam := request.URL.Query().Get("id")
+	idParam := request.PathValue("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		writer.WriteHeader(http.StatusBadRequest)
@@ -130,7 +130,34 @@ func (h *MessageHandler) FindByID(writer http.ResponseWriter, request *http.Requ
 }
 
 func (h *MessageHandler) Update(writer http.ResponseWriter, request *http.Request) {
-	writer.WriteHeader(http.StatusNotImplemented)
+	idParam := request.PathValue("id")
+	id, err := strconv.Atoi(idParam)
+
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	messageUpdateRequest := UpdateMessageRequest{}
+
+	if err := json.NewDecoder(request.Body).Decode(&messageUpdateRequest); err != nil {
+		slog.ErrorContext(request.Context(), "Failed to decode request body", "error", err)
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if id != messageUpdateRequest.ID {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	if err := h.service.Update(&message.Message{ID: messageUpdateRequest.ID, Content: messageUpdateRequest.Content}); err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	writer.WriteHeader(http.StatusNoContent)
+
 }
 
 func (h *MessageHandler) Delete(writer http.ResponseWriter, request *http.Request) {

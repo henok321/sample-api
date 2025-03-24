@@ -76,6 +76,25 @@ func (r *messageRepository) FindByID(id int) (*Message, error) {
 }
 
 func (r *messageRepository) Update(message *Message) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+	defer cancel()
+
+	row, err := r.db.QueryContext(ctx, "UPDATE messages SET content = $1, updated_at = $2 WHERE id = $3 RETURNING id, content, created_at, updated_at", message.Content, time.Now(), message.ID)
+
+	if err != nil {
+		return err
+	}
+
+	defer row.Close()
+
+	for row.Next() {
+		message := Message{}
+
+		if err := row.Scan(&message.ID, &message.Content, &message.CreatedAt, &message.UpdatedAt); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

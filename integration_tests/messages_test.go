@@ -31,6 +31,15 @@ func TestScores(t *testing.T) {
 				"Location":     "/messages/1",
 			},
 		},
+		"Update message": {
+			method:             "PUT",
+			endpoint:           "/messages/1",
+			requestBody:        `{"id": 1, "content": "Hello, Universe!"}`,
+			expectedStatusCode: 204,
+			setup: func(db *sql.DB) {
+				executeSQLFile(t, db, "./test_data/sql/messages.sql")
+			},
+		},
 	}
 
 	dbConn, teardownDatabase := setupTestDatabase(t)
