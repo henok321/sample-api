@@ -22,9 +22,9 @@ func main() {
 		os.Exit(exitCode)
 	}()
 
-	databaseUrl := os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("DATABASE_URL")
 
-	db, err := sql.Open("postgres", databaseUrl)
+	db, err := sql.Open("postgres", databaseURL)
 
 	if err != nil {
 		slog.Error("Database connection error", "error", err)

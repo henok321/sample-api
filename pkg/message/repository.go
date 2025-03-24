@@ -3,6 +3,7 @@ package message
 import (
 	"context"
 	"database/sql"
+	"log/slog"
 	"time"
 )
 
@@ -13,7 +14,7 @@ type Message struct {
 	UpdatedAt time.Time
 }
 
-type MessageRepository interface {
+type Repository interface {
 	Create(message *Message) (*Message, error)
 	FindAll() ([]*Message, error)
 	FindByID(id int) (*Message, error)
@@ -25,7 +26,7 @@ type messageRepository struct {
 	db *sql.DB
 }
 
-func newMessageRepository(db *sql.DB) MessageRepository {
+func newMessageRepository(db *sql.DB) Repository {
 	return &messageRepository{db: db}
 }
 
@@ -72,6 +73,7 @@ func (r *messageRepository) FindAll() ([]*Message, error) {
 }
 
 func (r *messageRepository) FindByID(id int) (*Message, error) {
+	slog.Info("Finding message by ID", "id", id)
 	return &Message{}, nil
 }
 
@@ -99,5 +101,6 @@ func (r *messageRepository) Update(message *Message) error {
 }
 
 func (r *messageRepository) Delete(id int) error {
+	slog.Info("Deleting message", "id", id)
 	return nil
 }

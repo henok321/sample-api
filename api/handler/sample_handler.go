@@ -30,10 +30,10 @@ type MessageListResponse struct {
 }
 
 type MessageHandler struct {
-	service message.MessageService
+	service message.Service
 }
 
-func NewMessageHandler(service message.MessageService) *MessageHandler {
+func NewMessageHandler(service message.Service) *MessageHandler {
 	return &MessageHandler{service: service}
 }
 
@@ -160,6 +160,6 @@ func (h *MessageHandler) Update(writer http.ResponseWriter, request *http.Reques
 
 }
 
-func (h *MessageHandler) Delete(writer http.ResponseWriter, request *http.Request) {
+func (h *MessageHandler) Delete(writer http.ResponseWriter, _ *http.Request) {
 	writer.WriteHeader(http.StatusNotImplemented)
 }

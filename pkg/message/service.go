@@ -1,6 +1,6 @@
 package message
 
-type MessageService interface {
+type Service interface {
 	Create(message *Message) (int, error)
 	FindAll() ([]*Message, error)
 	FindByID(id int) (*Message, error)
@@ -9,10 +9,10 @@ type MessageService interface {
 }
 
 type messageService struct {
-	repo MessageRepository
+	repo Repository
 }
 
-func newMessageService(repo MessageRepository) MessageService {
+func newMessageService(repo Repository) Service {
 	return &messageService{repo: repo}
 }
 
