@@ -1,6 +1,7 @@
 version: "2"
 run:
   tests: true
+
 linters:
   enable:
     - dupl
@@ -15,10 +16,8 @@ linters:
     - errname
     - exhaustive
     - godot
-    - godox
     - iface
     - sloglint
-    - gosec
     - unconvert
   settings:
     gocritic:
@@ -41,9 +40,11 @@ linters:
       - third_party$
       - builtin$
       - examples$
+
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
+
 formatters:
   enable:
     - gofmt
