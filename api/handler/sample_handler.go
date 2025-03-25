@@ -160,6 +160,19 @@ func (h *MessageHandler) Update(writer http.ResponseWriter, request *http.Reques
 
 }
 
-func (h *MessageHandler) Delete(writer http.ResponseWriter, _ *http.Request) {
-	writer.WriteHeader(http.StatusNotImplemented)
+func (h *MessageHandler) Delete(writer http.ResponseWriter, request *http.Request) {
+	idParam := request.PathValue("id")
+	id, err := strconv.Atoi(idParam)
+
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	err = h.service.Delete(id)
+
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	writer.WriteHeader(http.StatusNoContent)
 }

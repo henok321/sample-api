@@ -24,14 +24,15 @@ import (
 )
 
 type testCase struct {
-	method             string
-	endpoint           string
-	requestBody        string
-	requestHeaders     map[string]string
-	setup              func(db *sql.DB)
-	expectedStatusCode int
-	expectedBody       string
-	expectedHeaders    map[string]string
+	method              string
+	endpoint            string
+	requestBody         string
+	requestHeaders      map[string]string
+	setup               func(db *sql.DB)
+	assertDatabaseState func(t *testing.T, db *sql.DB)
+	expectedStatusCode  int
+	expectedBody        string
+	expectedHeaders     map[string]string
 }
 
 func newTestRequest(t *testing.T, tc testCase, server *httptest.Server) {

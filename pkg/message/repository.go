@@ -101,6 +101,14 @@ func (r *messageRepository) Update(message *Message) error {
 }
 
 func (r *messageRepository) Delete(id int) error {
-	slog.Info("Deleting message", "id", id)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+	defer cancel()
+
+	_, err := r.db.ExecContext(ctx, "DELETE FROM messages WHERE id = $1", id)
+
+	if err != nil {
+		return err
+	}
 	return nil
 }
