@@ -3,7 +3,6 @@ package message
 import (
 	"context"
 	"database/sql"
-	"log/slog"
 	"time"
 )
 
@@ -73,8 +72,19 @@ func (r *messageRepository) FindAll() ([]*Message, error) {
 }
 
 func (r *messageRepository) FindByID(id int) (*Message, error) {
-	slog.Info("Finding message by ID", "id", id)
-	return &Message{}, nil
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+	defer cancel()
+
+	row := r.db.QueryRowContext(ctx, "SELECT id, content, created_at, updated_at FROM messages WHERE id = $1", id)
+
+	message := &Message{}
+
+	if err := row.Scan(&message.ID, &message.Content, &message.CreatedAt, &message.UpdatedAt); err != nil {
+		return &Message{}, err
+	}
+
+	return message, nil
 }
 
 func (r *messageRepository) Update(message *Message) error {

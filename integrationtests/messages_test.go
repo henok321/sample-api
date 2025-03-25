@@ -21,6 +21,18 @@ func TestScores(t *testing.T) {
 				executeSQLFile(t, db, "./test_data/sql/messages.sql")
 			},
 		},
+		"Get message by id": {
+			method:             "GET",
+			endpoint:           "/messages/1",
+			expectedStatusCode: 200,
+			expectedHeaders: map[string]string{
+				"Content-Type": "application/json",
+			},
+			expectedBody: readContentFromFile(t, "./test_data/json/get_message_by_id.json"),
+			setup: func(db *sql.DB) {
+				executeSQLFile(t, db, "./test_data/sql/messages.sql")
+			},
+		},
 		"Create new message": {
 			method:             "POST",
 			endpoint:           "/messages",

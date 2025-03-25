@@ -117,7 +117,6 @@ func (h *MessageHandler) FindByID(writer http.ResponseWriter, request *http.Requ
 		ID:        message.ID,
 		Content:   message.Content,
 		CreatedAt: message.CreatedAt,
-
 		UpdatedAt: message.UpdatedAt,
 	}
 
