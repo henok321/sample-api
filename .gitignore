@@ -19,7 +19,9 @@ go.work.sum
 *.iml
 
 # VSCode
-.vscode
+.vscode */
+!./.vscode/extensions.json
+!./.vscode/launch.json
 sample-api
 **/__debug_**
 
