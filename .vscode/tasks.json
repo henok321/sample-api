@@ -9,8 +9,8 @@
                 "setup"
             ],
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "none",
+                "isDefault": false
             }
         },
         {
@@ -21,8 +21,8 @@
                 "down"
             ],
             "group": {
-                "kind": "build",
-                "isDefault": true
+                "kind": "none",
+                "isDefault": false
             }
         },
     ]
