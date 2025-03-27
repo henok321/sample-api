@@ -2,7 +2,7 @@
 
 GOARCH 			:= $(shell uname -m)
 GOOS 			:= $(shell uname -s | tr '[:upper:]' '[:lower:]')
-OUTPUT       	:= sample-api
+OUTPUT       	:= ./bin/sample-api
 BUILD_FLAGS  	:= -a -ldflags="-s -w -extldflags '-static'"
 CMD_DIR      	:= ./cmd
 
