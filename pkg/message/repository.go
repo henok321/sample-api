@@ -47,7 +47,7 @@ func (r *messageRepository) Create(message *Message) (*Message, error) {
 func (r *messageRepository) FindAll() ([]*Message, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	rows, err := r.db.QueryContext(ctx, "select id, content, created_at, updated_at from messages")
+	rows, err := r.db.QueryContext(ctx, "SELECT id, content, created_at, updated_at FROM messages ORDER BY id")
 
 	if err != nil {
 		return []*Message{}, err
