@@ -9,13 +9,16 @@ on:
       - 'README.md'
       - 'LICENSE'
       - '.pre-commit-config.yaml'
-      - .vscode/**
+      - '.vscode/**'
   pull_request:
     paths-ignore:
       - 'README.md'
       - 'LICENSE'
       - '.pre-commit-config.yaml'
-      - .vscode/**
+      - '.vscode/**'
+    branches:
+      - main
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
