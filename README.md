@@ -1,3 +1,6 @@
+[![CI](https://github.com/henok321/sample-api/actions/workflows/CI.yml/badge.svg)](https://github.com/henok321/sample-api/actions/workflows/CI.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=henok321_sample-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=henok321_sample-api)
+
 # Sample API
 
 ## Prerequisites
