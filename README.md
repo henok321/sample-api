@@ -57,7 +57,7 @@ make build
 set -o allexport
 source .env
 set +o allexport
-./sample-api
+./bin/sample-api
 ```
 
 ### Health Check
