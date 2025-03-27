@@ -9,6 +9,8 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
+            "preLaunchTask": "make setup",
+            "postDebugTask": "docker-compose down",
             "program": "${workspaceFolder}/cmd/main.go",
             "envFile": "${workspaceFolder}/.env",
         }
