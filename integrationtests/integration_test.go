@@ -120,7 +120,7 @@ func setupTestServer() (*httptest.Server, func(*httptest.Server)) {
 
 func setupTestDatabase(t *testing.T) (string, func()) {
 	ctx := context.Background()
-	pgContainer, err := postgres.Run(ctx, "docker.io/postgres:16-alpine", postgres.WithDatabase("knobel-manager-service"), postgres.WithUsername("test"), postgres.WithPassword("secret"), testcontainers.WithWaitStrategy(wait.ForLog("database system is ready to accept connections").
+	pgContainer, err := postgres.Run(ctx, "docker.io/postgres:16-alpine", postgres.WithDatabase("test-db"), postgres.WithUsername("test"), postgres.WithPassword("secret"), testcontainers.WithWaitStrategy(wait.ForLog("database system is ready to accept connections").
 		WithOccurrence(2).WithStartupTimeout(5*time.Second)))
 	if err != nil {
 		t.Fatalf("failed to start container: %v", err)
