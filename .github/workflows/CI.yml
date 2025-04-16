@@ -6,16 +6,16 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-      - '.pre-commit-config.yaml'
-      - .vscode/**
+      - "README.md"
+      - "LICENSE"
+      - ".vscode/**"
   pull_request:
     paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
-      - '.pre-commit-config.yaml'
-      - .vscode/**
+      - "README.md"
+      - "LICENSE"
+      - ".vscode/**"
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,15 +29,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install go
-        uses: actions/setup-go@v5
+      - name: Install python
+        uses: actions/setup-python@v5
         with:
-          go-version-file: go.mod
+          python-version: "3.13"
 
-      - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v7
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
         with:
-          version: v2.0
+          extra_args: --all-files
 
   test:
     name: Run Tests
@@ -50,10 +50,19 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-          cache-dependency-path: go.sum
 
       - name: Start Docker
         run: sudo systemctl start docker
+
+      - name: Cache Go Modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ${{ env.GOPATH }}/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
 
       - name: Run Tests
         env:
