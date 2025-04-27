@@ -41,6 +41,8 @@ lint:
 
 update:
 	@echo "Updating Go modules..."
+	pre-commit autoupdate
+	pre-commit migrate-config
 	go get -u ./...
 	go mod tidy
 
